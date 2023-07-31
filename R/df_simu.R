@@ -194,9 +194,9 @@ dose_algorithm_1 <- function(cur_data, lst_design, ...) {
 enroll_patients <- function(dta_all, fun_alg = dose_algorithm_1, ...) {
     n_dose  <- max(dta_all$dose_level)
     rst     <- NULL
-
     for (i in 1:n_dose) {
-        cur_data <- dta_all %>% dplyr::filter(dose_level == i)
+        cur_data <- dta_all %>%
+            dplyr::filter(dose_level == i)
         cur_rst  <- fun_alg(cur_data, ...)
         rst      <- c(rst, cur_rst)
 
