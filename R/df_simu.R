@@ -141,7 +141,7 @@ dose_algorithm_1 <- function(cur_data, lst_design, ...) {
                                   dlt_prior)
 
         if (!is_guarded) {
-            rst[i] <- -1
+            res[i] <- -1
             break
         }
 
@@ -191,7 +191,10 @@ dose_algorithm_1 <- function(cur_data, lst_design, ...) {
 #'
 #' @export
 #'
-enroll_patients <- function(dta_all, fun_alg = dose_algorithm_1, ...) {
+enroll_patients <- function(dta_all,
+                            fun_alg = dose_algorithm_1,
+                            ...) {
+
     n_dose  <- max(dta_all$dose_level)
     rst     <- NULL
     for (i in 1:n_dose) {
