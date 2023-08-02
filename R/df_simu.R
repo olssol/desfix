@@ -90,8 +90,8 @@ get_guarded <- function(dta_fix, dta_dlt,
     p_dlt_gt <- 1 - pbeta(dlt_thresh_r, post_a, post_b)
 
     ## fix activity and dlt
-    rst <- all(dta_fix < fix_interval_ind[2]) &&
-        p_dlt_gt < dlt_thresh_c
+    rst <- c(all(dta_fix < fix_interval_ind[2]),
+             p_dlt_gt < dlt_thresh_c)
 
     rst
 }
@@ -99,7 +99,19 @@ get_guarded <- function(dta_fix, dta_dlt,
 
 #' Dose escalation algorithm
 #'
-#' 0:stay -1:stop 1:escalate 2:selected
+#' 0:stay
+#'
+#' -12:stop after 6 patients
+#' -13:stop before 6 patients
+#' -14:stop for both DLT and Over FIX
+#' -15:stop for Over FIX
+#' -16:stop for DLT
+#'
+#' 11: escalate after the 1st patient;
+#' 12: escalate after 6 patients;
+#' 13: escalate before 6 patients
+#'
+#' 2:selected
 #'
 #' @export
 #'
@@ -127,7 +139,7 @@ dose_algorithm_1 <- function(cur_data, lst_design, ...) {
 
     ## check the first patient
     if (dta_fix[1] < fix_interval_ind[1]) {
-        res[1] <- 1
+        res[1] <- 11
         return(res)
     } else {
         res[1] <- 0
@@ -152,8 +164,15 @@ dose_algorithm_1 <- function(cur_data, lst_design, ...) {
                                   dlt_thresh_c,
                                   dlt_prior)
 
-        if (!is_guarded) {
-            res[i] <- -1
+
+        if (all(0 == is_guarded)) {
+            res[i] <- -14
+            break
+        } else if (0 == is_guarded[1]) {
+            res[i] <- -15
+            break
+        } else if (0 == is_guarded[2]) {
+            res[i] <- -16
             break
         }
 
@@ -175,18 +194,18 @@ dose_algorithm_1 <- function(cur_data, lst_design, ...) {
 
         if (n_pt_max == i) {
             if (!is_over_fix & 1 == max_mu) {
-                res[i] <- 1
+                res[i] <- 12
             } else if (!is_over_fix & 2 == max_mu) {
                 res[i] <- 2
             } else {
-                res[i] <- -1
+                res[i] <- -12
             }
         } else {
             if (!is_over_fix & 1 == max_mu) {
-                res[i] <- 1
+                res[i] <- 13
                 break
             } else if (is_over_fix & 3 == max_mu) {
-                res[i] <- -1
+                res[i] <- -13
                 break
             } else {
                 res[i] <- 0
@@ -212,10 +231,11 @@ enroll_patients <- function(dta_all,
     for (i in 1:n_dose) {
         cur_data <- dta_all %>%
             dplyr::filter(dose_level == i)
+
         cur_rst  <- fun_alg(cur_data, ...)
         rst      <- c(rst, cur_rst)
 
-        if (!any(1 == cur_rst, na.rm = TRUE))
+        if (!any(10 < cur_rst, na.rm = TRUE))
             break
     }
 

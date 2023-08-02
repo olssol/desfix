@@ -9,7 +9,7 @@
 #'
 #' @export
 #'
-df_shiny <- function(appname = "boundary", pkgname = "statidea") {
+df_shiny <- function(appname = "bayesian", pkgname = "statidea") {
     req.pkgs        <- c("shiny", "shinythemes", "DT",
                          "knitr", "rmarkdown", "pander");
     chk.uninstalled <- sapply(req.pkgs,
