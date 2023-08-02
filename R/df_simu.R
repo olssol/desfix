@@ -13,9 +13,21 @@ get_prob_intervals <- function(post_smps, interval) {
 
 #' Simulate patients
 #'
+#' @param cv Coefficient of variation. If it is scalar, the CV is assumed to be
+#'     the same across dose levels. If it is a vector, it has to be the same
+#'     length as mean_raw
+#'
 #' @export
 #'
+#'
 generate_patients_cv <- function(mean_raw, cv, ...) {
+
+    if (1 == length(cv)) {
+        cv <- rep(cv, length(mean_raw))
+    } else {
+        stopifnot(length(cv) == length(mean_raw))
+    }
+
     mean_log <- log(mean_raw / sqrt(1 + cv^2))
     sd_log   <- sqrt(log(1 + cv^2))
 
