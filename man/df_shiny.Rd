@@ -4,7 +4,7 @@
 \alias{df_shiny}
 \title{Run Web-Based application}
 \usage{
-df_shiny(appname = "boundary", pkgname = "statidea")
+df_shiny(appname = "bayesian", pkgname = "statidea")
 }
 \description{
 Call Shiny to run \code{statidea} as a web-based application.

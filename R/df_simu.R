@@ -31,9 +31,7 @@ generate_patients_cv <- function(mean_raw, cv, ...) {
     mean_log <- log(mean_raw / sqrt(1 + cv^2))
     sd_log   <- sqrt(log(1 + cv^2))
 
-    generate_patients(mean_log,
-                      rep(sd_log, length(mean_log)),
-                      ...)
+    generate_patients(mean_log, sd_log, ...)
 }
 
 #' Simulate patients
@@ -107,8 +105,8 @@ get_guarded <- function(dta_fix, dta_dlt,
 #' -15:stop for Over FIX
 #' -16:stop for DLT
 #'
-#' 11: escalate after the 1st patient;
-#' 12: escalate after 6 patients;
+#' 11: escalate after the 1st patient
+#' 12: escalate after 6 patients
 #' 13: escalate before 6 patients
 #'
 #' 2:selected

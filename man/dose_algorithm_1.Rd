@@ -7,5 +7,18 @@
 dose_algorithm_1(cur_data, lst_design, ...)
 }
 \description{
-0:stay -1:stop 1:escalate 2:selected
+0:stay
+}
+\details{
+-12:stop after 6 patients
+-13:stop before 6 patients
+-14:stop for both DLT and Over FIX
+-15:stop for Over FIX
+-16:stop for DLT
+
+11: escalate after the 1st patient
+12: escalate after 6 patients
+13: escalate before 6 patients
+
+2:selected
 }

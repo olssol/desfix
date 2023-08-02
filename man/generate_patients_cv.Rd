@@ -6,6 +6,11 @@
 \usage{
 generate_patients_cv(mean_raw, cv, ...)
 }
+\arguments{
+\item{cv}{Coefficient of variation. If it is scalar, the CV is assumed to be
+the same across dose levels. If it is a vector, it has to be the same
+length as mean_raw}
+}
 \description{
 Simulate patients
 }
